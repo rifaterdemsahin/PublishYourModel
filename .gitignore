@@ -1,0 +1,4 @@
+# Hugging Face caches and models
+.cache/
+fine_tuned_model/
+test_trainer/
