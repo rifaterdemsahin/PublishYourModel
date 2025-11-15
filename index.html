@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Plan: Anti-Hype AI Video</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 60rem; 
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        [role="tab"]:focus {
+            outline: 2px solid #c2410c;
+            outline-offset: 2px;
+        }
+        [role="tab"][aria-selected="true"] {
+            border-color: #c2410c;
+            color: #c2410c;
+            font-weight: 600;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals (Amber, Stone) -->
+    <!-- Application Structure Plan: A tabbed single-page application (Overview, VO Script, Shot List) was chosen. The original report is a linear document; this structure organizes it by *function* (summary, script, visual plan), which is more intuitive for a production team. Users click tabs to swap content. The "Shot List" tab includes an interactive Chart.js Gantt chart to visualize the video's flow, translating static timecodes into an immediate, explorable visual. This non-linear, organized structure significantly improves usability. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: Project Meta (Status, Runtime). Goal: Inform (at a glance). Viz/Method: Key-value stat cards (HTML/Tailwind) on 'Overview' tab. Interaction: None. Justification: Best for a high-level dashboard summary.
+        2. Report Info: VO Script Table. Goal: Inform (read script). Viz/Method: Clean HTML table on 'VO Script' tab. Interaction: Reading/scrolling. Justification: Clearest way to present script lines and cues.
+        3. Report Info: Shot List Table (Time In/Out). Goal: Change (show progression) & Organize. Viz/Method: 1) HTML Table for details. 2) Chart.js Bar Chart (as Gantt chart) on 'Shot List' tab. Interaction: Hover on chart bars for tooltips. Justification: The Gantt chart provides an instant visual summary of video pacing, which is a major improvement over reading numbers. Library: Chart.js (Canvas).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-amber-50 text-stone-900 antialiased">
+
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="mb-6 md:mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-stone-800">Production Plan</h1>
+            <p class="text-xl md:text-2xl text-amber-800">Anti-Hype AI Learning Video (Day 1)</p>
+        </header>
+
+        <main>
+            <div class="mb-6 border-b border-stone-300">
+                <nav class="-mb-px flex space-x-4 sm:space-x-6" role="tablist" aria-label="Project Sections">
+                    <button role="tab" aria-selected="true" id="tab-overview" aria-controls="panel-overview" class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm sm:text-base text-stone-700 hover:text-amber-700 hover:border-amber-600">
+                        Overview
+                    </button>
+                    <button role="tab" aria-selected="false" id="tab-script" aria-controls="panel-script" class="whitespace-nowrap py-3 px-1 border-b-2 border-transparent font-medium text-sm sm:text-base text-stone-500 hover:text-amber-700 hover:border-amber-600" tabindex="-1">
+                        VO Script
+                    </button>
+                    <button role="tab" aria-selected="false" id="tab-shots" aria-controls="panel-shots" class="whitespace-nowrap py-3 px-1 border-b-2 border-transparent font-medium text-sm sm:text-base text-stone-500 hover:text-amber-700 hover:border-amber-600" tabindex="-1">
+                        Shot List
+                    </button>
+                </nav>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8">
+                
+                <section id="panel-overview" role="tabpanel" tabindex="0" aria-labelledby="tab-overview">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-4">Project Overview</h2>
+                    <p class="text-base text-stone-700 mb-6">
+                        This dashboard provides a high-level summary of the 'Anti-Hype AI Learning Video' project. Here you'll find key metadata, project status, and the core creative concept, giving you a quick understanding of the project's goals.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <span class="block text-sm font-medium text-amber-800">Status</span>
+                            <span class="block text-xl font-semibold text-stone-800">PRODUCTION READY</span>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <span class="block text-sm font-medium text-amber-800">Owner</span>
+                            <span class="block text-xl font-semibold text-stone-800">@rifaterdemsahin</span>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <span class="block text-sm font-medium text-amber-800">Date</span>
+                            <span class="block text-xl font-semibold text-stone-800">2025-11-15</span>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <span class="block text-sm font-medium text-amber-800">Runtime</span>
+                            <span class="block text-xl font-semibold text-stone-800">90 Seconds</span>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-stone-800 mb-2">Core Concept</h3>
+                    <div class="bg-stone-50 border border-stone-200 rounded-lg p-4">
+                        <p class="text-stone-700">The total runtime is **90 seconds** (1:30), paced by a **60-second voiceover spine**. This allows the B-roll sections (screen recordings) to be extended for maximum clarity, prioritizing the learning experience over speed.</p>
+                    </div>
+                </section>
+
+                <section id="panel-script" role="tabpanel" tabindex="0" aria-labelledby="tab-script" class="hidden">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-4">VO Script (60-Second Spine)</h2>
+                    <p class="text-base text-stone-700 mb-6">
+                        This section contains the complete 60-second voiceover script that acts as the audio spine for the video. The script is broken down by VO cue and its corresponding timestamp from the 60-second edit.
+                    </p>
+                    <div class="flow-root">
+                        <div class="overflow-x-auto rounded-lg border border-stone-200">
+                            <table class="min-w-full divide-y divide-stone-200">
+                                <thead class="bg-stone-50">
+                                    <tr>
+                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-stone-900 sm:pl-6">VO Cue</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Time (VO)</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Script (VO)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200 bg-white">
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>1</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:00–0:03</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700">"Stuck in the AI boom and don’t know where to start?"</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>2</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:03–0:08</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700">"In 60 seconds, I’ll give you a learning starter that teaches you real AI—not just copy-paste."</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>3</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:08–0:15</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700">"Everyone says ‘learn AI’—but where do you actually begin? You need a foundation you can understand and build on."</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>4</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:15–0:25</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700">"This Build-Your-Own-Model template isn’t finished code—it’s your learning lab. Every line is commented to explain what it does and why."</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>5</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:25–0:35</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700">"Fork it. Read the comments. Change one function. Break it. Fix it. That’s how you actually learn. It’s called \[\[Delivery Pilot\]\]—your AI training ground."</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>6</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:35–0:45</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700">"Deploy it locally—your private practice environment. Make mistakes. That’s the point."</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>7</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:45–0:55</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700">"This is Day 1 of understanding AI. Not the finish line. Customize it. Study it. Make it yours over the next week."</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>8</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:55–1:00</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700">"GitHub link in description. It’s not magic—it’s a starting point. Your AI journey starts today. Let’s go."</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="panel-shots" role="tabpanel" tabindex="0" aria-labelledby="tab-shots" class="hidden">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-4">Shot List (Total Runtime: 1:30)</h2>
+                    <p class="text-base text-stone-700 mb-6">
+                        Explore the detailed shot-by-shot plan for the 90-second video. This section includes an interactive timeline visualizing the flow and duration of each scene, followed by a detailed table of shot types, frame rates, and key actions.
+                    </p>
+                    
+                    <h3 class="text-xl font-semibold text-stone-800 mb-4 text-center">Video Timeline</h3>
+                    <div class="chart-container mb-8">
+                        <canvas id="shotListChart"></canvas>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-stone-800 mb-4">Shot Details</h3>
+                    <div class="flow-root">
+                         <div class="overflow-x-auto rounded-lg border border-stone-200">
+                            <table class="min-w-full divide-y divide-stone-200">
+                                <thead class="bg-stone-50">
+                                    <tr>
+                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-stone-900 sm:pl-6">#</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Time In</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Time Out</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Scene Time</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Shot Type</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">FPS</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-stone-900">Scene Name / Key Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200 bg-white">
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>1</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:00</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:03</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">3s</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">MEDIUM CU (A-Roll)</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">24</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700"><strong>RELATABLE PAIN:</strong> You at desk, 5+ tutorial tabs open, slight head shake.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>2</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:03</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:08</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">5s</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">MEDIUM SHOT (A-Roll)</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">24</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700"><strong>HONEST PROMISE:</strong> Turn to camera, warm eye contact, subtle nod.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>3</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:08</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:18</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600"><strong>10s</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">SCREEN INSERT</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">60</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700"><strong>REAL PROBLEM (Breathe):</strong> Fast montage of "AI in 24hrs," "No Code AI," "Earn £10k/mo" thumbnails. **Hold the final image** for 2s to let the feeling sink in.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-stone-900 sm:pl-6"><strong>4</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:18</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">0:33</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600"><strong>15s</strong></td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">SCREEN RECORD</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-stone-600">60</td>
+                                        <td class="px-3 py-4 text-sm text-stone-700"><strong>LEARNING TOOL (Breathe):</strong> VS Code: Slow pan across the comments in the `define_model` function. Highlight: `// This loads your data...` comment is visible and highlighted with a yellow glow.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const tabs = document.querySelectorAll('[role="tab"]');
+            const panels = document.querySelectorAll('[role="tabpanel"]');
+
+            const switchTab = (clickedTab) => {
+                tabs.forEach(tab => {
+                    tab.setAttribute('aria-selected', 'false');
+                    tab.setAttribute('tabindex', '-1');
+                    tab.classList.remove('text-amber-700', 'border-amber-600', 'font-semibold');
+                    tab.classList.add('text-stone-500', 'border-transparent');
+                });
+
+                panels.forEach(panel => {
+                    panel.classList.add('hidden');
+                });
+
+                clickedTab.setAttribute('aria-selected', 'true');
+                clickedTab.removeAttribute('tabindex');
+                clickedTab.classList.add('text-amber-700', 'border-amber-600', 'font-semibold');
+                clickedTab.classList.remove('text-stone-500', 'border-transparent');
+
+                const controlledPanel = document.getElementById(clickedTab.getAttribute('aria-controls'));
+                if (controlledPanel) {
+                    controlledPanel.classList.remove('hidden');
+                }
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    switchTab(e.currentTarget);
+                });
+
+                tab.addEventListener('keydown', (e) => {
+                    let index = Array.from(tabs).indexOf(e.currentTarget);
+                    let newIndex = index;
+
+                    if (e.key === 'ArrowRight') {
+                        newIndex = (index + 1) % tabs.length;
+                    } else if (e.key === 'ArrowLeft') {
+                        newIndex = (index - 1 + tabs.length) % tabs.length;
+                    } else if (e.key === 'Home') {
+                        newIndex = 0;
+                    } else if (e.key === 'End') {
+                        newIndex = tabs.length - 1;
+                    } else {
+                        return; 
+                    }
+                    
+                    tabs[newIndex].focus();
+                    switchTab(tabs[newIndex]);
+                });
+            });
+
+            const shotListCtx = document.getElementById('shotListChart');
+            if (shotListCtx) {
+                const shotData = {
+                    labels: [
+                        ['Scene 1:', 'Relatable Pain (3s)'],
+                        ['Scene 2:', 'Honest Promise (5s)'],
+                        ['Scene 3:', 'Real Problem (10s)'],
+                        ['Scene 4:', 'Learning Tool (15s)']
+                    ],
+                    datasets: [{
+                        label: 'Scene Duration',
+                        data: [
+                            [0, 3],
+                            [3, 8],
+                            [8, 18],
+                            [18, 33]
+                        ],
+                        backgroundColor: [
+                            'rgba(217, 119, 6, 0.6)', 
+                            'rgba(217, 119, 6, 0.6)',
+                            'rgba(217, 119, 6, 0.8)',
+                            'rgba(217, 119, 6, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(217, 119, 6, 1)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                };
+
+                new Chart(shotListCtx, {
+                    type: 'bar',
+                    data: shotData,
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                min: 0,
+                                max: 90, 
+                                title: {
+                                    display: true,
+                                    text: 'Time in Seconds (Total 90s Runtime)',
+                                    color: '#44403c',
+                                    font: {
+                                        weight: '600'
+                                    }
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#44403c',
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const d = context.raw;
+                                        return ` Scene ${context.dataIndex + 1}: ${d[0]}s to ${d[1]}s (Duration: ${d[1] - d[0]}s)`;
+                                    },
+                                    title: function(context) {
+                                        return context[0].label.replace(',', ' ');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
